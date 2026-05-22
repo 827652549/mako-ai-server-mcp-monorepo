@@ -1,11 +1,6 @@
-"""
-核心配置模块
-"""
-import json
 from functools import lru_cache
-from typing import List, Union
 
-from pydantic import Field, field_validator
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -16,27 +11,12 @@ class Settings(BaseSettings):
 
     # MCP 鉴权（本地可随意填，远程部署时对外保密）
     MCP_API_KEY: str = Field(..., description="MCP 服务鉴权 Key")
-    ALLOWED_ORIGINS: List[str] = Field(default=["http://localhost:3000"])
-    @field_validator("ALLOWED_ORIGINS", mode="before")
-    @classmethod
-    def parse_allowed_origins(cls, v: Union[str, List[str]]) -> List[str]:
-        if isinstance(v, list):
-            origins = v
-        elif isinstance(v, str):
-            v = v.strip()
-            if v.startswith("["):
-                try:
-                    origins = json.loads(v)
-                except json.JSONDecodeError:
-                    origins = [o.strip() for o in v.split(",") if o.strip()]
-            else:
-                origins = [o.strip() for o in v.split(",") if o.strip()]
-        else:
-            origins = ["http://localhost:3000"]
-        origins = [str(x).strip() for x in origins if str(x).strip()]
-        if "*" in origins:
-            raise ValueError("ALLOWED_ORIGINS 禁止使用通配符")
-        return origins or ["http://localhost:3000"]
+    # 逗号分隔的允许域名，多个域名示例：https://a.com,https://b.com
+    ALLOWED_ORIGINS: str = Field(default="http://localhost:3000")
+
+    @property
+    def allowed_origins_list(self) -> list[str]:
+        return [o.strip() for o in self.ALLOWED_ORIGINS.split(",") if o.strip()]
 
     # 视觉模型（小米中转，Anthropic 兼容格式）
     VISION_BASE_URL: str = Field(
