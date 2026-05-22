@@ -22,6 +22,8 @@ services:
     startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT --no-access-log
     healthCheckPath: /health
     envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.11"          # 锁定 Python 版本，避免 Render 默认使用 3.14
       - key: MCP_API_KEY
         sync: false               # Dashboard 手动填
       - key: VISION_AUTH_TOKEN
