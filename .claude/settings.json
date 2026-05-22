@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "vision-mcp": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://vision-mcp.onrender.com/mcp/",
+        "--header",
+        "X-API-Key: 310090fd1f03a3c17f83cd1716e7202c621c56a0412f6261002804f10c59f1e3",
+        "--transport",
+        "http-only"
+      ]
+    }
+  }
+}

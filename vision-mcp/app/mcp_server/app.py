@@ -13,7 +13,7 @@ logger = get_logger()
 # Configure transport security for production deployment
 transport_security = TransportSecuritySettings(
     enable_dns_rebinding_protection=True,
-    allowed_hosts=["vision-mcp.onrender.com", "vision-mcp.onrender.com:*"],
+    allowed_hosts=["vision-mcp.onrender.com", "vision-mcp.onrender.com:*", "localhost", "localhost:*", "127.0.0.1", "127.0.0.1:*"],
     allowed_origins=["https://vision-mcp.onrender.com"],
 )
 
