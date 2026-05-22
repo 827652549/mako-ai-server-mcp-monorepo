@@ -70,9 +70,6 @@ def create_protected_mcp_app() -> Callable:
             has_auth_header=has_auth,
         )
 
-        # Debug: log received headers and expected key
-        expected_key = settings.MCP_API_KEY
-        logger.info("mcp_debug_headers", headers={k.decode(): v.decode() for k, v in headers.items()}, expected_key_prefix=expected_key[:8] if expected_key else "None", expected_key_suffix=expected_key[-8:] if expected_key else "None")
 
         # 验证API Key（必须 await，verify_api_key_asgi 为 async）
         if not await verify_api_key_asgi(scope, headers):
