@@ -70,6 +70,9 @@ def create_protected_mcp_app() -> Callable:
             has_auth_header=has_auth,
         )
 
+        # Debug: log received headers
+        logger.info("mcp_debug_headers", headers={k.decode(): v.decode() for k, v in headers.items()})
+
         # 验证API Key（必须 await，verify_api_key_asgi 为 async）
         if not await verify_api_key_asgi(scope, headers):
             response = JSONResponse(
