@@ -11,4 +11,4 @@ COPY . .
 ENV PORT=8001
 
 EXPOSE $PORT
-CMD uvicorn app.main:app --host 0.0.0.0 --port $PORT --log-config none
+CMD uvicorn app.main:app --host 0.0.0.0 --port $PORT --no-access-log
