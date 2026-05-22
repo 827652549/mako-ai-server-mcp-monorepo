@@ -1,0 +1,58 @@
+# Render Infrastructure as Code
+# 文档: https://render.com/docs/blueprint-spec
+#
+# 使用方式:
+#   Render Dashboard → New → Blueprint → 连接此仓库
+#   Render 自动读取本文件，创建所有 services
+#
+# 敏感变量（sync: false）需在 Render Dashboard 手动填写，不进代码库
+
+services:
+
+  ##############################################################
+  # vision-mcp — 视觉工具箱
+  ##############################################################
+  - type: web
+    name: vision-mcp
+    rootDir: vision-mcp
+    runtime: python
+    plan: free                    # 免费套餐；生产改为 starter 或以上
+    buildCommand: pip install -e ".[dev]"
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT --log-config none
+    healthCheckPath: /health
+    envVars:
+      - key: MCP_API_KEY
+        sync: false               # Dashboard 手动填
+      - key: VISION_AUTH_TOKEN
+        sync: false               # Dashboard 手动填
+      - key: VISION_BASE_URL
+        value: https://token-plan-cn.xiaomimimo.com/anthropic
+      - key: VISION_MODEL
+        value: mimo-v2.5
+      - key: VISION_MAX_TOKENS
+        value: "2048"
+      - key: VISION_TIMEOUT
+        value: "60.0"
+      - key: LOG_LEVEL
+        value: INFO
+      - key: JSON_LOGS
+        value: "true"
+      - key: PROMETHEUS_ENABLED
+        value: "false"           # Render 免费版无 /metrics 采集，关掉节省资源
+      - key: ALLOWED_ORIGINS
+        value: '["*"]'           # 部署后按实际调用方域名收紧
+
+  ##############################################################
+  # 后续新增 MCP 服务在此追加，格式相同
+  ##############################################################
+  # - type: web
+  #   name: another-mcp
+  #   rootDir: another-mcp
+  #   runtime: python
+  #   plan: free
+  #   buildCommand: pip install -e ".[dev]"
+  #   startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT --log-config none
+  #   healthCheckPath: /health
+  #   envVars:
+  #     - key: MCP_API_KEY
+  #       sync: false
