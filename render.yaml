@@ -43,7 +43,7 @@ services:
       - key: PROMETHEUS_ENABLED
         value: "false"           # Render 免费版无 /metrics 采集，关掉节省资源
       - key: ALLOWED_ORIGINS
-        value: '["*"]'           # 部署后按实际调用方域名收紧
+        value: 'http://localhost:3000' # 部署后改为实际调用方域名
 
   ##############################################################
   # 后续新增 MCP 服务在此追加，格式相同
